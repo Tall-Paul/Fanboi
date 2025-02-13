@@ -8,23 +8,33 @@ import (
 	"fmt"
 )
 
-// RoleHook takes the role contents, DB and Post and returns the text this role
-// should be replaced with.
+type pluginTemplateData struct {
+	identifier string
+	value      float32
+}
+
 type getHook func(string) float32
 
-// ContentsHook takes the post contents, DB and Post and returns the replacement
-// contents.
+// the 'set' hook takes an identifier and a value (eg: fan1, 50)
 type setHook func(string, float32)
 
+type isTemplateHook func() bool
+
+type writeTemplateHook func(data map[int]pluginTemplateData)
+
 type PluginManager struct {
-	getHooks map[string]getHook
-	setHooks map[string]setHook
+	getHooks           map[string]getHook
+	setHooks           map[string]setHook
+	isTemplateHooks    map[string]isTemplateHook
+	writeTemplateHooks map[string]writeTemplateHook
 }
 
 func newPluginManager() *PluginManager {
 	pm := &PluginManager{}
 	pm.setHooks = make(map[string]setHook)
 	pm.getHooks = make(map[string]getHook)
+	pm.writeTemplateHooks = make(map[string]writeTemplateHook)
+	pm.isTemplateHooks = make(map[string]isTemplateHook)
 	return pm
 }
 
@@ -36,11 +46,36 @@ func (pm *PluginManager) RegisterSetHook(plugin string, hook setHook) {
 	pm.setHooks[plugin] = hook
 }
 
+func (pm *PluginManager) RegisterWriteTemplateHook(plugin string, hook writeTemplateHook) {
+	pm.writeTemplateHooks[plugin] = hook
+}
+
+func (pm *PluginManager) RegisterisTemplateHook(plugin string, hook isTemplateHook) {
+	pm.isTemplateHooks[plugin] = hook
+}
+
+func (pm *PluginManager) CheckIsTemplateHook(plugin string) bool {
+	if hook, ok := pm.isTemplateHooks[plugin]; ok {
+		return hook()
+	} else {
+		fmt.Printf("no get hook for plugin %s' found", plugin)
+		return false
+	}
+}
+
+func (pm *PluginManager) WriteTemplateHook(plugin string, data map[int]pluginTemplateData) {
+	if hook, ok := pm.writeTemplateHooks[plugin]; ok {
+		hook(data)
+	} else {
+		fmt.Printf("no get hook for plugin %s' found", plugin)
+	}
+}
+
 func (pm *PluginManager) ApplyGetHook(plugin string, identifier string) (float32, error) {
 	if hook, ok := pm.getHooks[plugin]; ok {
 		return hook(identifier), nil
 	} else {
-		return -1, fmt.Errorf("no get hook for plugin '%s' found", plugin)
+		return -1, fmt.Errorf("no get hook for plugin %s' found", plugin)
 	}
 }
 
