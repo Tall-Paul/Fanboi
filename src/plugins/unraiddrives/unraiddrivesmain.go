@@ -4,9 +4,13 @@ import (
 	"fanboi/plugin"
 )
 
+func main() {
+
+}
+
 func InitPlugin(pm *plugin.PluginManager) error {
-	pm.RegisterGetHook("unraid_drives", getDriveTemp)
-	pm.RegisterSetHook("unraid_drives", setDriveTemp)
+	pm.RegisterGetHook("unraiddrives", getDriveTemp)
+	pm.RegisterSetHook("unraiddrives", setDriveTemp)
 	return nil
 }
 
