@@ -36,7 +36,7 @@ func LoadPlugins(path string) (*PluginManager, error) {
 	for _, entry := range infos {
 		if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".so") {
 			fullpath := filepath.Join(path, entry.Name())
-			fmt.Println("found plugin file", fullpath)
+			fmt.Printf("Loaded plugin %s \n", entry.Name())
 
 			p, err := plugin.Open(fullpath)
 			if err != nil {
