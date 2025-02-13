@@ -3,12 +3,7 @@ package main
 import (
 	"fanboi/plugin"
 	"fmt"
-	"strconv"
 )
-
-func main() {
-
-}
 
 func InitPlugin(pm *plugin.PluginManager) error {
 	pm.RegisterSetHook("echo", outputText)
@@ -17,11 +12,13 @@ func InitPlugin(pm *plugin.PluginManager) error {
 }
 
 func echoValue(identifier string) float32 {
-	returnval, err := strconv.ParseFloat(identifier, 32)
-	if err == nil {
-		return float32(returnval)
-	} else {
-		return -1
+	switch identifier {
+	case "one":
+		return 1.00
+	case "two":
+		return 2.00
+	default:
+		return 100.00
 	}
 }
 
