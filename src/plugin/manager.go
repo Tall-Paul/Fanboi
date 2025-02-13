@@ -20,12 +20,11 @@ type setHook func(string, float32)
 
 type isTemplateHook func() bool
 
-type writeTemplateHook func(data map[int]PluginTemplateData)
+type writeTemplateHook func(data map[string]float32)
 
 type PluginManager struct {
 	getHooks           map[string]getHook
 	setHooks           map[string]setHook
-	isTemplateHooks    map[string]isTemplateHook
 	writeTemplateHooks map[string]writeTemplateHook
 }
 
@@ -34,7 +33,6 @@ func newPluginManager() *PluginManager {
 	pm.setHooks = make(map[string]setHook)
 	pm.getHooks = make(map[string]getHook)
 	pm.writeTemplateHooks = make(map[string]writeTemplateHook)
-	pm.isTemplateHooks = make(map[string]isTemplateHook)
 	return pm
 }
 
@@ -50,20 +48,7 @@ func (pm *PluginManager) RegisterWriteTemplateHook(plugin string, hook writeTemp
 	pm.writeTemplateHooks[plugin] = hook
 }
 
-func (pm *PluginManager) RegisterisTemplateHook(plugin string, hook isTemplateHook) {
-	pm.isTemplateHooks[plugin] = hook
-}
-
-func (pm *PluginManager) CheckIsTemplateHook(plugin string) bool {
-	if hook, ok := pm.isTemplateHooks[plugin]; ok {
-		return hook()
-	} else {
-		fmt.Printf("no get hook for plugin %s' found", plugin)
-		return false
-	}
-}
-
-func (pm *PluginManager) WriteTemplateHook(plugin string, data map[int]PluginTemplateData) {
+func (pm *PluginManager) WriteTemplateHook(plugin string, data map[string]float32) {
 	if hook, ok := pm.writeTemplateHooks[plugin]; ok {
 		hook(data)
 	} else {
@@ -83,4 +68,12 @@ func (pm *PluginManager) ApplySetHook(plugin string, identifier string, value fl
 	if hook, ok := pm.setHooks[plugin]; ok {
 		hook(identifier, value)
 	}
+}
+
+func (pm *PluginManager) ListTemplatePlugins() map[string]bool {
+	out := make(map[string]bool)
+	for pluginName := range pm.writeTemplateHooks {
+		out[pluginName] = true
+	}
+	return out
 }
