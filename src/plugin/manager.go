@@ -8,9 +8,9 @@ import (
 	"fmt"
 )
 
-type pluginTemplateData struct {
-	identifier string
-	value      float32
+type PluginTemplateData struct {
+	Identifier string
+	Value      float32
 }
 
 type getHook func(string) float32
@@ -20,7 +20,7 @@ type setHook func(string, float32)
 
 type isTemplateHook func() bool
 
-type writeTemplateHook func(data map[int]pluginTemplateData)
+type writeTemplateHook func(data map[int]PluginTemplateData)
 
 type PluginManager struct {
 	getHooks           map[string]getHook
@@ -63,7 +63,7 @@ func (pm *PluginManager) CheckIsTemplateHook(plugin string) bool {
 	}
 }
 
-func (pm *PluginManager) WriteTemplateHook(plugin string, data map[int]pluginTemplateData) {
+func (pm *PluginManager) WriteTemplateHook(plugin string, data map[int]PluginTemplateData) {
 	if hook, ok := pm.writeTemplateHooks[plugin]; ok {
 		hook(data)
 	} else {
