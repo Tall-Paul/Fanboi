@@ -7,9 +7,32 @@ import (
 	"strings"
 )
 
-func InitPlugin(pm *plugin.PluginManager) error {
+type templatePlugin struct {
+	template string
+	values   map[string]float32
+}
 
+func (tem templatePlugin) SetValue(identifier string, value float32) {
+	tem.values[identifier] = value
+}
+
+func (tem templatePlugin) GetValue(identifier string) float32 {
+	return tem.values[identifier]
+}
+
+func (tem templatePlugin) StartHook() {
+
+}
+
+func (tem templatePlugin) EndHook() {
+
+}
+
+func InitPlugin(pm *plugin.PluginManager) error {
+	values := make(map[string]float32)
+	this := templatePlugin{"", values}
 	pm.RegisterWriteTemplateHook("template", writeTemplate)
+	pm.RegisterPlugin("template", this)
 	return nil
 }
 

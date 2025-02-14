@@ -13,12 +13,17 @@ type PluginTemplateData struct {
 	Value      float32
 }
 
+type PluginInterface interface {
+	GetValue(indentifier string) float32
+	SetValue(identifier string, value float32)
+	StartHook()
+	EndHook()
+}
+
 type getHook func(string) float32
 
 // the 'set' hook takes an identifier and a value (eg: fan1, 50)
 type setHook func(string, float32)
-
-type isTemplateHook func() bool
 
 type writeTemplateHook func(data map[string]float32)
 
@@ -26,6 +31,7 @@ type PluginManager struct {
 	getHooks           map[string]getHook
 	setHooks           map[string]setHook
 	writeTemplateHooks map[string]writeTemplateHook
+	plugins            map[string]PluginInterface
 }
 
 func newPluginManager() *PluginManager {
@@ -33,7 +39,12 @@ func newPluginManager() *PluginManager {
 	pm.setHooks = make(map[string]setHook)
 	pm.getHooks = make(map[string]getHook)
 	pm.writeTemplateHooks = make(map[string]writeTemplateHook)
+	pm.plugins = make(map[string]PluginInterface)
 	return pm
+}
+
+func (pm *PluginManager) RegisterPlugin(plugin string, pluginInterface PluginInterface) {
+	pm.plugins[plugin] = pluginInterface
 }
 
 func (pm *PluginManager) RegisterGetHook(plugin string, hook getHook) {
@@ -76,4 +87,8 @@ func (pm *PluginManager) ListTemplatePlugins() map[string]bool {
 		out[pluginName] = true
 	}
 	return out
+}
+
+func (pm *PluginManager) GetPlugin(pluginName string) PluginInterface {
+	return pm.plugins[pluginName]
 }

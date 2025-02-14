@@ -2,6 +2,7 @@ package main
 
 import (
 	"fanboi/plugin"
+	"fmt"
 	"log"
 )
 
@@ -19,7 +20,7 @@ func main() {
 	}
 
 	//this bit is just to test the template stuff works
-	fan1Temp, err := pm.ApplyGetHook("echo", "one")
+	/*fan1Temp, err := pm.ApplyGetHook("echo", "one")
 	if err == nil {
 		cache["template"]["fan1"] = fan1Temp
 	}
@@ -27,7 +28,13 @@ func main() {
 	if err == nil {
 		cache["template"]["fan2"] = fan2Temp
 	}
-
 	pm.WriteTemplateHook("template", cache["template"])
+	*/
+	templatePlugin := pm.GetPlugin("template")
+	templatePlugin.SetValue("testing", 1.00)
+	templatePlugin.SetValue("testing2", 2.00)
+	templatePlugin.SetValue("testing3", 3.00)
 
+	templatePlugin2 := pm.GetPlugin("template")
+	fmt.Printf("testing2 is %f", templatePlugin2.GetValue("testing2"))
 }
