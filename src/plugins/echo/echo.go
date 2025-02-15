@@ -2,16 +2,16 @@ package main
 
 import (
 	"fanboi/plugin"
-	"fmt"
 )
 
-func InitPlugin(pm *plugin.PluginManager) error {
-	pm.RegisterSetHook("echo", outputText)
-	pm.RegisterGetHook("echo", echoValue)
-	return nil
+type echoPlugin struct {
 }
 
-func echoValue(identifier string) float32 {
+func (pl echoPlugin) SetValue(identifier string, value float32) {
+	//noop
+}
+
+func (pl echoPlugin) GetValue(identifier string) float32 {
 	switch identifier {
 	case "one":
 		return 1.00
@@ -22,6 +22,16 @@ func echoValue(identifier string) float32 {
 	}
 }
 
-func outputText(identifier string, value float32) {
-	fmt.Printf("Identifier %s set to %f", identifier, value)
+func (pl echoPlugin) StartHook() {
+
+}
+
+func (pl echoPlugin) EndHook() {
+
+}
+
+func InitPlugin(pm *plugin.PluginManager) error {
+	pl := echoPlugin{}
+	pm.RegisterPlugin("echo", pl)
+	return nil
 }
