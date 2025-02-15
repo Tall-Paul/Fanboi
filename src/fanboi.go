@@ -8,33 +8,28 @@ import (
 
 func main() {
 	pluginDir := "./plugins"
-	cache := make(map[string]map[string]float32)
-
 	pm, err := plugin.LoadPlugins(pluginDir)
-	for pluginName := range pm.ListTemplatePlugins() {
-		cache[pluginName] = make(map[string]float32)
-	}
-
 	if err != nil {
 		log.Fatal(err)
 	}
+	for _, pl := range pm.GetPlugins() {
+		pl.StartHook()
+	}
+	fmt.Println()
 
-	//this bit is just to test the template stuff works
-	/*fan1Temp, err := pm.ApplyGetHook("echo", "one")
-	if err == nil {
-		cache["template"]["fan1"] = fan1Temp
-	}
-	fan2Temp, err := pm.ApplyGetHook("echo", "two")
-	if err == nil {
-		cache["template"]["fan2"] = fan2Temp
-	}
-	pm.WriteTemplateHook("template", cache["template"])
-	*/
+	//check unraiddrive plugin works
+	ud := pm.GetPlugin("unraiddrives")
+	fmt.Printf("parity temp is %f", ud.GetValue("parity"))
+	fmt.Println()
+
+	//check template plugin works
 	templatePlugin := pm.GetPlugin("template")
-	templatePlugin.SetValue("testing", 1.00)
-	templatePlugin.SetValue("testing2", 2.00)
-	templatePlugin.SetValue("testing3", 3.00)
+	templatePlugin.SetValue("fan1", 5.00)
+	templatePlugin.SetValue("fan2", 10.00)
+	templatePlugin.SetValue("fan3", 15.00)
 
-	templatePlugin2 := pm.GetPlugin("template")
-	fmt.Printf("testing2 is %f", templatePlugin2.GetValue("testing2"))
+	for _, pl := range pm.GetPlugins() {
+		pl.EndHook()
+	}
+
 }
