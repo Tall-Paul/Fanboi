@@ -5,7 +5,6 @@
 package plugin
 
 import (
-	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -36,7 +35,7 @@ func LoadPlugins(path string) (*PluginManager, error) {
 	for _, entry := range infos {
 		if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".so") {
 			fullpath := filepath.Join(path, entry.Name())
-			fmt.Printf("Loaded plugin %s \n", entry.Name())
+			//fmt.Printf("Loaded plugin %s \n", entry.Name())
 
 			p, err := plugin.Open(fullpath)
 			if err != nil {
