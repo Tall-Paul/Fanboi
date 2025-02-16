@@ -2,6 +2,7 @@ package main
 
 import (
 	"fanboi/plugin"
+	"fanboi/rules"
 	"fmt"
 	"log"
 )
@@ -12,24 +13,35 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, pl := range pm.GetPlugins() {
-		pl.StartHook()
+	rulesFile := "./rules.fnb"
+	ok, rm := rules.LoadRules(rulesFile, pm)
+	if ok {
+		for _, pl := range pm.GetPlugins() {
+			pl.StartHook()
+		}
+
+		rm.RunRules()
+
+		for _, pl := range pm.GetPlugins() {
+			pl.EndHook()
+		}
+	} else {
+		fmt.Println("Error loading rules")
 	}
-	fmt.Println()
 
-	//check unraiddrive plugin works
-	ud := pm.GetPlugin("unraiddrives")
-	fmt.Printf("parity temp is %f", ud.GetValue("parity"))
-	fmt.Println()
+	/*
+		fmt.Println()
 
-	//check template plugin works
-	templatePlugin := pm.GetPlugin("template")
-	templatePlugin.SetValue("fan1", 5.00)
-	templatePlugin.SetValue("fan2", 10.00)
-	templatePlugin.SetValue("fan3", 15.00)
+		//check unraiddrive plugin works
+		ud := pm.GetPlugin("unraiddrives")
+		fmt.Printf("parity temp is %f", ud.GetValue("parity"))
+		fmt.Println()
 
-	for _, pl := range pm.GetPlugins() {
-		pl.EndHook()
-	}
+		//check template plugin works
+		templatePlugin := pm.GetPlugin("template")
+		templatePlugin.SetValue("fan1", 5.00)
+		templatePlugin.SetValue("fan2", 10.00)
+		templatePlugin.SetValue("fan3", 15.00)
+	*/
 
 }
