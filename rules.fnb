@@ -1,0 +1,5 @@
+template fan1_speed 30
+template fan2_speed 20
+IF unraiddrives * > 45 THEN template fan1_speed 40
+IF unraiddrives * > 50 THEN template fan1_speed 50 
+IF unraiddrives * > 50 THEN template fan2_speed 50
