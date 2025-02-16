@@ -35,7 +35,7 @@ func (tem templatePlugin) EndHook() {
 
 func InitPlugin(pm *plugin.PluginManager) error {
 	values := make(map[string]float32)
-	this := templatePlugin{"fan1: {fan1}, fan2: {fan2}", values}
+	this := templatePlugin{"fan1: {fan1_speed}, fan2: {fan2_speed}", values}
 	pm.RegisterPlugin("template", this)
 	return nil
 }
