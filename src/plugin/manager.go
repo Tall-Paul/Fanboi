@@ -31,7 +31,12 @@ func (pm *PluginManager) RegisterPlugin(plugin string, pluginInterface PluginInt
 }
 
 func (pm *PluginManager) GetPlugin(pluginName string) PluginInterface {
-	return pm.plugins[pluginName]
+	pl, ok := pm.plugins[pluginName]
+	if ok {
+		return pl
+	} else {
+		return nil
+	}
 }
 
 func (pm *PluginManager) GetPlugins() map[string]PluginInterface {
