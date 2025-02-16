@@ -3,7 +3,6 @@ package main
 import (
 	"fanboi/plugin"
 	"fanboi/rules"
-	"fmt"
 	"log"
 )
 
@@ -13,20 +12,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	for _, pl := range pm.GetPlugins() {
+		pl.StartHook()
+	}
+
 	rulesFile := "./rules.fnb"
 	ok, rm := rules.LoadRules(rulesFile, pm)
 	if ok {
-		for _, pl := range pm.GetPlugins() {
-			pl.StartHook()
-		}
-
 		rm.RunRules()
-
-		for _, pl := range pm.GetPlugins() {
-			pl.EndHook()
-		}
-	} else {
-		fmt.Println("Error loading rules")
+	}
+	for _, pl := range pm.GetPlugins() {
+		pl.EndHook()
 	}
 
 	/*
