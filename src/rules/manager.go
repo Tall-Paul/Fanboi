@@ -2,6 +2,7 @@ package rules
 
 import (
 	"fanboi/plugin"
+	"fmt"
 )
 
 type RuleManager struct {
@@ -42,6 +43,9 @@ func (rule RuleOutput) setOutput() {
 }
 
 func (rule RuleInput) checkInput() bool {
+	if rule.isEmpty {
+		return true
+	}
 	currentVal := rule.plugin.GetValue(rule.identifer)
 	setPoint := rule.value
 	switch rule.comparator {
@@ -77,9 +81,18 @@ func (rule RuleInput) checkInput() bool {
 }
 
 func (rm *RuleManager) RunRules() {
-	for _, rule := range rm.rules {
+	for i := 1; i <= len(rm.rules); i++ {
+		rule := rm.rules[i]
 		if rule.Input.checkInput() {
+			//fmt.Printf("line %v evaluated true", rule.lineNo)
 			rule.Output.setOutput()
+		} else {
+			//fmt.Printf("line %v evaluated false", rule.lineNo)
 		}
+		//fmt.Println()
 	}
+}
+
+func (rm *RuleManager) DumpRules() {
+	fmt.Printf("%+v\n", rm.rules)
 }

@@ -41,7 +41,7 @@ func LoadRules(ruleFile string, pm *plugin.PluginManager) (bool, RuleManager) {
 		}
 		ruleInputObj := RuleInput{true, nil, "", "", 0}
 		if ruleInputText != "" {
-			inputparts := strings.Split(ruleInputText, " ")
+			inputparts := strings.Split(strings.TrimSpace(ruleInputText), " ")
 			if len(inputparts) == 5 {
 				pl := pm.GetPlugin(inputparts[1])
 				if pl != nil {
@@ -52,9 +52,8 @@ func LoadRules(ruleFile string, pm *plugin.PluginManager) (bool, RuleManager) {
 				}
 			}
 		}
-
 		if ruleOutputText != "" {
-			outputparts := strings.Split(ruleOutputText, " ")
+			outputparts := strings.Split(strings.TrimSpace(ruleOutputText), " ")
 			if len(outputparts) == 3 {
 				pl := pm.GetPlugin(outputparts[0])
 				if pl != nil {
@@ -69,7 +68,6 @@ func LoadRules(ruleFile string, pm *plugin.PluginManager) (bool, RuleManager) {
 		}
 
 	}
-	file.Close()
 	rm := RuleManager{out}
 	return true, rm
 }
