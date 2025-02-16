@@ -20,7 +20,18 @@ func (pl unraiddrivesPlugin) SetValue(identifier string, value float32) {
 }
 
 func (pl unraiddrivesPlugin) GetValue(identifier string) float32 {
-	return pl.driveTemps[identifier]
+	if identifier != "*" {
+		return pl.driveTemps[identifier]
+	} else {
+		//get highest temp
+		maxTemp := float32(0.00)
+		for _, temp := range pl.driveTemps {
+			if temp > maxTemp {
+				maxTemp = temp
+			}
+		}
+		return maxTemp
+	}
 }
 
 func (pl unraiddrivesPlugin) StartHook() {
