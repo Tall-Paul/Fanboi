@@ -1,5 +1,12 @@
-template fan1_speed 30
-template fan2_speed 20
-IF unraiddrives * > 45 THEN template fan1_speed 40
-IF unraiddrives * > 50 THEN template fan1_speed 50 
-IF unraiddrives * > 50 THEN template fan2_speed 50
+liquidctl fan1_speed 20
+liquidctl fan2_speed 20
+liquidctl fan3_speed 20
+liquidctl fan4_speed 25
+liquidctl fan5_speed 25
+liquidctl fan6_speed 25
+IF unraiddrives * > 40 THEN liquidctl fan1_speed 30
+IF unraiddrives * > 45 THEN liquidctl fan1_speed 40 
+IF unraiddrives * > 45 THEN liquidctl fan2_speed 30
+if unraiddrives * > 47 THEN liquidctl fan1_speed 45
+if unraiddrives * > 49 THEN liquidctl fan1_speed 50
+if unraiddrives * > 49 THEN liquidctl fan2_speed 40
