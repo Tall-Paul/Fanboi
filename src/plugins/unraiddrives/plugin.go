@@ -10,6 +10,8 @@ import (
 	"strings"
 )
 
+const inputFile = "/var/local/emhttp/disks.ini"
+
 type unraiddrivesPlugin struct {
 	filePath   string
 	driveTemps map[string]float32
@@ -75,7 +77,7 @@ func (pl unraiddrivesPlugin) EndHook() {
 }
 
 func InitPlugin(pm *plugin.PluginManager) error {
-	this := unraiddrivesPlugin{"./disks.ini", make(map[string]float32)}
+	this := unraiddrivesPlugin{inputFile, make(map[string]float32)}
 	pm.RegisterPlugin("unraiddrives", this)
 	return nil
 }
