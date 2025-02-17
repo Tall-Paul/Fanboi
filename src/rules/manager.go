@@ -88,6 +88,13 @@ func (rm *RuleManager) RunRules() {
 	for i := 1; i <= len(rm.rules); i++ {
 		rule := rm.rules[i]
 		if rule.Input.checkInput() {
+			if !rule.Input.isEmpty {
+				fmt.Printf("[%v] Updating %s to %v", rule.lineNo, rule.Output.identifer, rule.Output.value)
+				fmt.Println()
+			} else {
+				fmt.Printf("[%v] defaulting %s to %v", rule.lineNo, rule.Output.identifer, rule.Output.value)
+				fmt.Println()
+			}
 			rule.Output.setOutput()
 		} else {
 		}
