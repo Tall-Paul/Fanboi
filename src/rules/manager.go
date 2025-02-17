@@ -6,6 +6,7 @@ import (
 )
 
 type RuleManager struct {
+	//pm    *plugin.PluginManager
 	rules map[int]Rule
 }
 

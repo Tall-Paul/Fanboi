@@ -20,7 +20,7 @@ type PluginManager struct {
 	plugins map[string]PluginInterface
 }
 
-func newPluginManager() *PluginManager {
+func NewPluginManager() *PluginManager {
 	pm := &PluginManager{}
 	pm.plugins = make(map[string]PluginInterface)
 	return pm

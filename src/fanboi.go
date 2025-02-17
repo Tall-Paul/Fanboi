@@ -3,18 +3,11 @@ package main
 import (
 	"fanboi/plugin"
 	"fanboi/rules"
-	"log"
 )
 
 func main() {
-	pluginDir := "./plugins"
-	pm, err := plugin.LoadPlugins(pluginDir)
-	if err != nil {
-		log.Fatal(err)
-	}
-	for _, pl := range pm.GetPlugins() {
-		pl.StartHook()
-	}
+
+	pm := plugin.NewPluginManager()
 
 	rulesFile := "./rules.fnb"
 	ok, rm := rules.LoadRules(rulesFile, pm)

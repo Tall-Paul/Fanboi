@@ -44,6 +44,9 @@ func LoadRules(ruleFile string, pm *plugin.PluginManager) (bool, RuleManager) {
 			inputparts := strings.Split(strings.TrimSpace(ruleInputText), " ")
 			if len(inputparts) == 5 {
 				pl := pm.GetPlugin(inputparts[1])
+				if pl == nil {
+					pl, _ = pm.LoadPlugin(inputparts[1])
+				}
 				if pl != nil {
 					val, err := strconv.ParseFloat(inputparts[4], 32)
 					if err == nil {
@@ -56,6 +59,9 @@ func LoadRules(ruleFile string, pm *plugin.PluginManager) (bool, RuleManager) {
 			outputparts := strings.Split(strings.TrimSpace(ruleOutputText), " ")
 			if len(outputparts) == 3 {
 				pl := pm.GetPlugin(outputparts[0])
+				if pl == nil {
+					pl, _ = pm.LoadPlugin(outputparts[0])
+				}
 				if pl != nil {
 					val, err := strconv.ParseFloat(outputparts[2], 32)
 					if err == nil {
