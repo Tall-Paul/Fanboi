@@ -6,7 +6,7 @@ import (
 )
 
 type RuleManager struct {
-	//pm    *plugin.PluginManager
+	pm    *plugin.PluginManager
 	rules map[int]Rule
 }
 
@@ -82,15 +82,18 @@ func (rule RuleInput) checkInput() bool {
 }
 
 func (rm *RuleManager) RunRules() {
+	for _, pl := range rm.pm.GetPlugins() {
+		pl.StartHook()
+	}
 	for i := 1; i <= len(rm.rules); i++ {
 		rule := rm.rules[i]
 		if rule.Input.checkInput() {
-			//fmt.Printf("line %v evaluated true", rule.lineNo)
 			rule.Output.setOutput()
 		} else {
-			//fmt.Printf("line %v evaluated false", rule.lineNo)
 		}
-		//fmt.Println()
+	}
+	for _, pl := range rm.pm.GetPlugins() {
+		pl.EndHook()
 	}
 }
 

@@ -9,11 +9,12 @@ import (
 	"strings"
 )
 
-func LoadRules(ruleFile string, pm *plugin.PluginManager) (bool, RuleManager) {
+func LoadRules(ruleFile string) (bool, RuleManager) {
+	pm := plugin.NewPluginManager()
 	file, err := os.Open(ruleFile)
 	if err != nil {
 		log.Fatal(err)
-		return false, RuleManager{nil}
+		return false, RuleManager{nil, nil}
 	}
 	defer func() {
 		if err = file.Close(); err != nil {
@@ -74,6 +75,6 @@ func LoadRules(ruleFile string, pm *plugin.PluginManager) (bool, RuleManager) {
 		}
 
 	}
-	rm := RuleManager{out}
+	rm := RuleManager{pm, out}
 	return true, rm
 }
